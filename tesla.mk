@@ -16,7 +16,7 @@
 $(call inherit-product, vendor/tesla/config/nfc_enhanced.mk)
 
 # Inherit some common Tesla stuff.
-$(call inherit-product, vendor/Tesla/config/common_full_phone.mk)
+$(call inherit-product, vendor/tesla/config/common_full_phone.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/sony/nicki/nicki.mk)
