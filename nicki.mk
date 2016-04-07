@@ -14,7 +14,6 @@
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, vendor/sony/nicki/nicki-vendor.mk)
-$(call inherit-product, device/sony/common/resources.mk)
 
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
@@ -194,10 +193,6 @@ PRODUCT_PACKAGES += \
     libtime_genoff \
     com.google.widevine.software.drm
 
-# Sensors
-PRODUCT_PACKAGES += \
-    sensord
-
 # WiFi
 PRODUCT_PROPERTY_OVERRIDES += \
     wlan.driver.ath=0 \
@@ -227,11 +222,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     qcom.audio.init=complete \
     persist.audio.fluence.mode=endfire \
     persist.audio.vr.enable=false \
-    persist.audio.handset.mic=analog \
+    persist.audio.handset.mic=digital \
     persist.audio.lowlatency.rec=false \
     media.aac_51_output_enabled=true \
     ro.qc.sdk.audio.ssr=false \
-    ro.qc.sdk.audio.fluencetype=none \
+    ro.qc.sdk.audio.fluencetype=fluence \
     qcom.hw.aac.encoder=true
 
 PRODUCT_PROPERTY_OVERRIDES += \

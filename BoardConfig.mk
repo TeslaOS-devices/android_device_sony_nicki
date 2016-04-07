@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Inherit from Sony common
-include device/sony/common/BoardConfigCommon.mk
-
-USE_CAMERA_STUB := false
-
 # Architecture
 TARGET_ARCH := arm
 TARGET_CPU_ABI := armeabi-v7a
@@ -25,6 +20,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
 
 # Platform
+BOARD_VENDOR := sony
 TARGET_BOARD_PLATFORM := msm8960
 BOARD_VENDOR_PLATFORM := nicki
 TARGET_BOOTLOADER_BOARD_NAME := qcom
@@ -67,7 +63,19 @@ USE_OPENGL_RENDERER := true
 TARGET_USES_ION := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_DISPLAY_USE_RETIRE_FENCE := true
+
+# Enables Adreno RS driver
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+
+# Shader cache config options
+# Maximum size of the  GLES Shaders that can be cached for reuse.
+# Increase the size if shaders of size greater than 12KB are used.
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+
+# Maximum GLES shader cache size for each app to store the compiled shader
+# binaries. Decrease the size if RAM or Flash Storage size is a limitation
+# of the device.
+MAX_EGL_CACHE_SIZE := 2048*1024
 
 # GPS
 USE_DEVICE_SPECIFIC_GPS := true
@@ -75,6 +83,9 @@ USE_DEVICE_SPECIFIC_GPS := true
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 BOARD_USES_LEGACY_ALSA_AUDIO := true
+BOARD_USES_FLUENCE_INCALL := true
+BOARD_USES_SEPERATED_AUDIO_INPUT := true
+BOARD_USES_SEPERATED_VOICE_SPEAKER_MIC := true
 QCOM_CSDCLIENT_ENABLED := false
 
 # Lights HAL
@@ -113,10 +124,13 @@ WIFI_DRIVER_MODULE_NAME          := "wlan"
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
 
+# Custom bootimage
+BOARD_CUSTOM_BOOTIMG := true
+BOARD_CUSTOM_BOOTIMG_MK := device/sony/nicki/custombootimg.mk
+
 # Recovery
 TARGET_RECOVERY_FSTAB := device/sony/nicki/rootdir/root/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-BOARD_CUSTOM_BOOTIMG_MK := device/sony/nicki/custombootimg.mk
 
 TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_nicki
