@@ -50,8 +50,10 @@ on boot
     chown bluetooth bluetooth /proc/bluetooth/sleep/proto
     chown system system /sys/module/sco/parameters/disable_esco
     chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
+    chown system system /sys/module/radio_iris_transport/parameters/fmsmd_set
     chmod 0660 /sys/module/bluetooth_power/parameters/power
     chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
+    chmod 0660 /sys/module/radio_iris_transport/parameters/fmsmd_set
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chmod 0660 /proc/bluetooth/sleep/proto
     chown bluetooth bluetooth /dev/ttyHS0
@@ -158,6 +160,10 @@ on post-fs-data
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
     write /sys/module/subsystem_restart/parameters/restart_level 1
+
+    #Create FM dir for patchdownloader
+    mkdir /data/misc/fm 0770 system system
+    chmod 0770 /data/misc/fm
 
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
@@ -347,7 +353,7 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start
-    user root
+    user system
     group system
     disabled
     oneshot
@@ -376,19 +382,22 @@ on property:sys.boot_completed=1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/online 1
+
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
     write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 702000
     write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 100000
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
-    write /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor 100000
+
     write /sys/module/cpu_boost/parameters/boost_ms 20
     write /sys/module/cpu_boost/parameters/sync_threshold 594000
     write /sys/module/cpu_boost/parameters/input_boost_freq 810000
     write /sys/module/cpu_boost/parameters/input_boost_ms 40
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
+
     chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
@@ -398,6 +407,7 @@ on property:sys.boot_completed=1
     chmod 220 /sys/devices/system/cpu/mfreq
     chown root system /sys/devices/system/cpu/cpu1/online
     chmod 664 /sys/devices/system/cpu/cpu1/online
+
     rm /data/system/perfd/default_values
     start mpdecision
 
