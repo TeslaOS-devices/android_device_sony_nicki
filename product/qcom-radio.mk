@@ -2,13 +2,9 @@
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
-# RIL packages
-PRODUCT_PACKAGES += \
-    libtime_genoff
-
 # RIL properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libargs=-d /dev/smd0 \
+    rild.libargs=-d[SPACE]/dev/smd0 \
     rild.libpath=/system/lib/libril-qc-qmi-1.so \
     ro.telephony.ril_class=SonyRIL
 
